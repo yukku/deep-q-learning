@@ -8,14 +8,16 @@ from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory
 from environment import Environment
  
-EPISODES = 20000
+EPISODES = 10000
 
 env = Environment()
 model = Sequential()
 model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
-model.add(Dense(24))
+model.add(Dense(64))
 model.add(Activation('relu'))
-model.add(Dense(24))
+model.add(Dense(32))
+model.add(Activation('relu'))
+model.add(Dense(8))
 model.add(Activation('relu'))
 model.add(Dense(env.action_space.n))
 model.add(Activation('linear'))
@@ -34,8 +36,8 @@ dqn = DQNAgent(
   policy=policy
 )
 dqn.compile(
-  Adam(lr=1e-3), 
-  metrics=['mae']
+  Adam(lr=0.001), 
+  metrics=['mse']
 )
 
 dqn.fit(
