@@ -1,8 +1,9 @@
-import numpy as np
 import gym
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.optimizers import Adam
+from keras.callbacks import TensorBoard
+from time import time
 from rl.agents.dqn import DQNAgent
 from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory
@@ -40,11 +41,14 @@ dqn.compile(
   metrics=['mse']
 )
 
+tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
+
 dqn.fit(
   env, 
   nb_steps=EPISODES*env.dataLength, 
   log_interval=EPISODES*env.dataLength,
+  callbacks=[tensorboard]
   # visualize=True
 )
-# dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
+dqn.save_weights('dqn_weights.h5f', overwrite=True)
 # dqn.test(env, nb_episodes=5, visualize=False)

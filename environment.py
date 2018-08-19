@@ -13,7 +13,7 @@ class Environment(gym.core.Env):
       low=np.zeros([1, WINDOW_SIZE]), 
       high=np.ones([1, WINDOW_SIZE])
     )
-
+  
     self.counter = 0
     self.data = getDataset("NVDA.csv")
     self.dataLength = len(self.data)
@@ -27,13 +27,13 @@ class Environment(gym.core.Env):
 
     if action == 1: # buy
       self.inventory.append(self.data[self.counter])
-      print("Buy: " + formatPrice(self.data[self.counter]))
+      # print("Buy: " + formatPrice(self.data[self.counter]))
 
     elif action == 2 and len(self.inventory) > 0: # sell
       bought_price = self.inventory.pop(0)
       reward = max(self.data[self.counter] - bought_price, 0)
       self.total_profit += self.data[self.counter] - bought_price
-      print("Sell: " + formatPrice(self.data[self.counter]) + " | Profit: " + formatPrice(self.data[self.counter] - bought_price))
+      # print("Sell: " + formatPrice(self.data[self.counter]) + " | Profit: " + formatPrice(self.data[self.counter] - bought_price))
 
     done = (self.counter == self.dataLength - 2)
     if(done): 
