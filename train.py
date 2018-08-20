@@ -3,15 +3,19 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.optimizers import Adam
 from keras.callbacks import TensorBoard
+from keras.models import load_model
 from time import time
 from rl.agents.dqn import DQNAgent
 from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory
+import os.path
 from environment import Environment
  
 EPISODES = 10000
+WEIGHTS_NAME = "dqn_weights.h5f"
 
 env = Environment()
+
 model = Sequential()
 model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
 model.add(Dense(64))
@@ -41,6 +45,10 @@ dqn.compile(
   metrics=['mse']
 )
 
+if(os.path.exists(WEIGHTS_NAME)):
+  dqn.load_weights(WEIGHTS_NAME)
+  print("saved weight loaded")
+
 tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
 
 dqn.fit(
@@ -50,5 +58,5 @@ dqn.fit(
   callbacks=[tensorboard]
   # visualize=True
 )
-dqn.save_weights('dqn_weights.h5f', overwrite=True)
+dqn.save_weights(WEIGHTS_NAME, overwrite=True)
 # dqn.test(env, nb_episodes=5, visualize=False)
