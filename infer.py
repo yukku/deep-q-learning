@@ -11,8 +11,8 @@ from rl.memory import SequentialMemory
 import os.path
 from environment import Environment
  
-EPISODES = 3
 WINDOW_SIZE = 10
+EPISODES = 3
 WEIGHTS_NAME = "dqn_weights.h5f"
 
 env = Environment()
@@ -45,18 +45,9 @@ dqn.compile(
   metrics=['mae']
 )
 
-# if(os.path.exists(WEIGHTS_NAME)):
-#   dqn.load_weights(WEIGHTS_NAME)
-#   print("saved weight loaded")
+if(os.path.exists(WEIGHTS_NAME)):
+  dqn.load_weights(WEIGHTS_NAME)
+  print("saved weight loaded")
 
-tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
-
-dqn.fit(
-  env, 
-  nb_steps=EPISODES*env.dataLength, 
-  log_interval=EPISODES*env.dataLength,
-  callbacks=[tensorboard]
-  # visualize=True
-)
 dqn.test(env, nb_episodes=1, visualize=False)
-dqn.save_weights(WEIGHTS_NAME, overwrite=True)
+

@@ -4,14 +4,12 @@ import gym.spaces
 import numpy as np
 from utils import getDataset, getState, formatPrice
 
-WINDOW_SIZE = 10
-
 class Environment(gym.core.Env):
   def __init__(self):
     self.action_space = gym.spaces.Discrete(3)
     self.observation_space = gym.spaces.Box(
-      low=np.zeros([1, WINDOW_SIZE]), 
-      high=np.ones([1, WINDOW_SIZE])
+      low=np.array([0.0]), 
+      high=np.array([1.0])
     )
   
     self.counter = 0
@@ -21,8 +19,10 @@ class Environment(gym.core.Env):
     self.total_profit = 0
 
   def step(self, action):
+
     self.counter += 1
-    state = getState(self.data, self.counter, WINDOW_SIZE + 1)
+    state = getState(self.data, self.counter, 1 + 1)
+    # print(state)
     reward = 0
 
     if action == 1: # buy
@@ -39,12 +39,15 @@ class Environment(gym.core.Env):
     if(done): 
       print("\nTOTAL_PROFIT: " + formatPrice(self.total_profit) + "\n")
 
-    return np.array(state), reward, done, {}
+    return np.array(state[0]), reward, done, {}
  
   def reset(self):
     self.counter = 0
     self.inventory = []
     self.total_profit = 0
-    state = getState(self.data, 0, WINDOW_SIZE + 1)
-    return np.array(state)
+    state = getState(self.data, 0, 1 + 1)
+    # print(state)
+
+    return np.array(state[0])
+
 
