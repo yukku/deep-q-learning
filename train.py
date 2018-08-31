@@ -13,9 +13,10 @@ from environment import Environment
  
 EPISODES = 3
 WINDOW_SIZE = 10
-WEIGHTS_NAME = "dqn_weights.h5f"
+DATA_SET_PATH = "datasets/NVDA Aug 24 2018.csv"
+WEIGHTS_NAME = "23.08.18/dqn_weights.h5f"
 
-env = Environment()
+env = Environment(dataSetPath=DATA_SET_PATH)
 model = Sequential()
 model.add(Flatten(input_shape=(WINDOW_SIZE,) + env.observation_space.shape))
 model.add(Dense(64))
